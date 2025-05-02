@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your ASCII Video</title>
+  <style>
+    body { background: #111; color: #eee; font-family: monospace; white-space: pre; }
+  </style>
+</head>
+<body>
+  <pre id="ascii">Loading…</pre>
+  <script>
+    const evt = new EventSource("/stream/{{.}}");
+    evt.onmessage = e => document.getElementById("ascii").textContent = e.data;
+  </script>
+</body>
+</html>
