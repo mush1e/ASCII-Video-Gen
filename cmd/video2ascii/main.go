@@ -17,7 +17,6 @@ var (
 
 func main() {
 	mux := http.NewServeMux()
-
 	mux.HandleFunc("/", uploadPage)
 	mux.HandleFunc("/upload", uploadHandler)
 	mux.HandleFunc("/stream/", streamHandler)
@@ -26,10 +25,10 @@ func main() {
 		Addr:         ":8080",
 		Handler:      mux,
 		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		WriteTimeout: 30 * time.Second,
 	}
 
-	log.Println("Listening on :8080")
+	log.Println("Server started on :8080")
 	log.Fatal(srv.ListenAndServe())
 }
 
