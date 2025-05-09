@@ -2,113 +2,40 @@
 <html>
 <head>
     <title>ASCII Video Converter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .upload-container {
-            border: 2px dashed #ccc;
-            padding: 40px 20px;
-            text-align: center;
-            margin: 30px 0;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .upload-container:hover {
-            border-color: #999;
-            background-color: #f0f0f0;
-        }
-        input[type="file"] {
-            display: none;
-        }
-        .file-label {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-        .file-label:hover {
-            background-color: #45a049;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0b7dda;
-        }
-        .file-name {
-            margin-top: 10px;
-            font-style: italic;
-        }
-        .loading {
-            display: none;
-            margin-top: 20px;
-        }
-        .info {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: #e7f3fe;
-            border-left: 4px solid #2196F3;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>ASCII Video Converter</h1>
-    
-    <div class="info">
-        <p>Upload a video file to convert it into an ASCII art animation. For best results, use short videos (under 30 seconds) with good contrast.</p>
-    </div>
-    
-    <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
-        <div class="upload-container">
-            <label for="videoInput" class="file-label">Choose Video File</label>
-            <input type="file" name="video" id="videoInput" accept="video/*" required>
-            <div class="file-name" id="fileName">No file selected</div>
-            
-            <button type="submit" id="convertBtn">Convert to ASCII</button>
-            
-            <div class="loading" id="loading">
-                <p>Converting your video... This may take a moment.</p>
-                <progress id="progressBar" max="100" value="0"></progress>
-            </div>
+    <div class="scanlines"></div>
+    <div class="container">
+        <h1 class="glitch">ASCII Video Converter</h1>
+        
+        <div class="info">
+            <p>> Upload video for ASCII conversion</p>
+            <p>> Optimal: Short clips (under 30s)</p>
+            <p>> High contrast works best</p>
         </div>
-    </form>
+        
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-container">
+                <label for="videoInput" class="file-label">[SELECT VIDEO FILE]</label>
+                <input type="file" name="video" id="videoInput" accept="video/*" required>
+                <div class="file-name" id="fileName">> No file selected</div>
+                
+                <button type="submit" id="convertBtn">[INITIATE CONVERSION]</button>
+                
+                <div class="loading" id="loading">
+                    <p>> Processing frames...</p>
+                    <progress id="progressBar" max="100" value="0"></progress>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <script>
         document.getElementById('videoInput').addEventListener('change', function() {
-            const fileName = this.files[0] ? this.files[0].name : 'No file selected';
+            const fileName = this.files[0] ? `> Selected: ${this.files[0].name}` : '> No file selected';
             document.getElementById('fileName').textContent = fileName;
-        });
-        
-        document.getElementById('uploadForm').addEventListener('submit', function() {
-            document.getElementById('convertBtn').disabled = true;
-            document.getElementById('loading').style.display = 'block';
-            
-            // Simulate progress for UX
-            let progress = 0;
-            const progressBar = document.getElementById('progressBar');
-            const interval = setInterval(function() {
-                progress += Math.random() * 5;
-                if (progress > 90) progress = 90;
-                progressBar.value = progress;
-            }, 300);
         });
     </script>
 </body>

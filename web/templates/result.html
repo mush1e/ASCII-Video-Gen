@@ -1,71 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Video Player</title>
-    <style>
-        body {
-            background: #000;
-            color: #00ff00;
-            font-family: monospace;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-        }
-        .player {
-            /* allow full width and horizontal scroll */
-            zoom: 0.5;              /* shrink content to 50% */
-            overflow-x: auto;       /* enable horizontal scrolling if needed */
-            width: 100%;            /* fill available space */
-            box-sizing: border-box;
-            padding: 10px 0;
-        }
-        pre#ascii {
-            /* remove width constraints */
-            display: inline-block;
-            white-space: pre;       /* preserve spaces and newlines */
-            font-size: 5px;
-            line-height: 5px;
-            letter-spacing: 0;
-            margin: 0;
-            padding: 1px 0;
-        }
-        .controls {
-            margin-top: 20px;
-        }
-        .status {
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        @media (min-width: 768px) {
-            .player {
-                zoom: 0.6;
-            }
-            pre#ascii {
-                font-size: 6px;
-                line-height: 6px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <div class="scanlines"></div>
     <div class="container">
-        <h1>ASCII Video Player</h1>
+        <h1 class="glitch">[LIVE FEED]</h1>
+        <p>Zoom to see ASCII characters!</p>
         <div class="player">
-            <pre id="ascii">Initializing video playback...</pre>
+            <pre id="ascii">[INITIALIZING VIDEO STREAM...]</pre>
         </div>
-        <div class="status" id="status">Buffering frames...</div>
+        <div class="status" id="status">> BUFFERING: ███████▒▒▒ 70%</div>
         <div class="controls">
-            <button id="backBtn">Back to Upload</button>
+            <button id="backBtn">> TERMINATE CONNECTION</button>
         </div>
     </div>
 
@@ -77,13 +27,10 @@
         const statusElement = document.getElementById("status");
         const asciiElement = document.getElementById("ascii");
         
-        // Buffer at least 10 frames before starting playback
-        const MIN_BUFFER_SIZE = 10;
-        
         function playFrames() {
             if (frameBuffer.length > 0) {
                 asciiElement.textContent = frameBuffer.shift();
-                statusElement.textContent = `Playing frame ${++totalFrames} (${frameBuffer.length} buffered)`;
+                statusElement.innerHTML = `> PLAYING FRAME ${++totalFrames} <span style="color:#009900">[${frameBuffer.length} BUFFERED]</span>`;
             }
             if (isPlaying) {
                 requestAnimationFrame(playFrames);
@@ -94,30 +41,31 @@
           const asciiFrame = JSON.parse(e.data);
           frameBuffer.push(asciiFrame);
 
-          if (!isPlaying && frameBuffer.length >= MIN_BUFFER_SIZE) {
-            statusElement.textContent = `Starting playback (${frameBuffer.length} frames buffered)`;
+          if (!isPlaying && frameBuffer.length >= 10) {
+            statusElement.innerHTML = `> INITIALIZING PLAYBACK <span style="color:#009900">[${frameBuffer.length} FRAMES LOADED]</span>`;
             isPlaying = true;
             playFrames();
           }
         };
         
         evt.addEventListener('end', function(e) {
-            statusElement.textContent = "Playback complete!";
+            statusElement.innerHTML = '> STREAM COMPLETE <span style="color:#009900">[END OF TRANSMISSION]</span>';
             isPlaying = false;
             evt.close();
         });
         
-        evt.onerror = () => {
-            if (frameBuffer.length === 0) {
-                statusElement.textContent = "Playback complete!";
-                isPlaying = false;
-                evt.close();
-            }
-        };
-        
         document.getElementById("backBtn").addEventListener("click", function() {
             window.location.href = "/";
         });
+
+        setInterval(() => {
+            if (Math.random() < 0.1) {
+                document.querySelector('h1').classList.add('glitch');
+                setTimeout(() => {
+                    document.querySelector('h1').classList.remove('glitch');
+                }, 100);
+            }
+        }, 1000);
     </script>
 </body>
 </html>

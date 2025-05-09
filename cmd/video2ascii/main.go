@@ -21,6 +21,8 @@ func main() {
 	mux.HandleFunc("/upload", uploadHandler)
 	mux.HandleFunc("/stream/", streamHandler)
 
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
+
 	srv := &http.Server{
 		Addr:         ":8080",
 		Handler:      mux,
