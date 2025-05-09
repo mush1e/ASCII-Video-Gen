@@ -14,7 +14,7 @@ this bad boy chews up videos and spits out keyboard diarrhea that vaguely resemb
 
 ## 🌟 Features That’ll Make Your Grandma Ask If You’re Okay
 
-- 🔁 Real-Time Conversio    – Because waiting is for cowards
+- 🔁 Real-Time Conversion   – Because waiting is for cowards
 - 🧱 Character-Based Frames – Who needs pixels when you have punctuation?
 - 🧠 Browser-Based Playback – I know y'all arent booting up a terminal
 - 💾 FFmpeg Wizardry        – Yeah I used this (still can't wrap my head around this)
